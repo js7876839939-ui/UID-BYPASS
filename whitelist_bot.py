@@ -83,12 +83,17 @@ def load_whitelist(server: str) -> dict:
         return {}
 
 def save_whitelist(server: str, data: dict):
-    """Saves the whitelist for a specific server."""
     filename = get_whitelist_filename(server)
+
+    print("SAVE FUNCTION CALLED:", server)
+    print("SAVING TO:", os.path.abspath(filename))
+
     try:
-        with open(filename, 'w', encoding='utf-8') as f:
+        with open(filename, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
+
         print(f"[Whitelist] Saved {filename}")
+
     except Exception as e:
         print(f"[Error] Failed to save {filename}: {e}")
 
