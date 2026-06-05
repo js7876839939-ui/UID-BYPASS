@@ -1180,7 +1180,10 @@ async def whitelistmaincheck(interaction: discord.Interaction, uid: str):
         
         with open(main_file, 'r', encoding='utf-8') as f:
             main_data = json.load(f)
-        
+        print(f"[DEBUG] UID received = '{uid}'")
+        print(f"[DEBUG] Keys = {list(main_data.get('whitelisted_uids', {}).keys())}")
+        print(f"[DEBUG] Match = {uid in main_data.get('whitelisted_uids', {})}")       
+
         if "whitelisted_uids" in main_data and uid in main_data["whitelisted_uids"]:
             expiry = main_data["whitelisted_uids"][uid]
             current_time = time.time()
