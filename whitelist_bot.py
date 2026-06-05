@@ -8,10 +8,32 @@ from datetime import datetime, timezone
 from pathlib import Path
 import asyncio
 import hashlib
+from flask import Flask, jsonify
+import json, threading
 
 # Replace with your bot token
 import os
+# ===== API Code Start =====
+app = Flask(__name__)
 
+@app.route('/')
+def home():
+    return "Bot Running"
+
+@app.route('/whitelist')
+def get_whitelist():
+    try:
+        with open('/app/whitelist.json', 'r') as f:
+            data = json.load(f)
+        return jsonify(data)
+    except:
+        return jsonify([])
+
+def run_flask():
+    app.run(host='0.0.0.0', port=8080)
+
+threading.Thread(target=run_flask, daemon=True).start()
+# ===== API Code End =====
 TOKEN = os.getenv("DISCORD_TOKEN")
 SERVERS = ["bd", "br", "europe", "id", "ind", "me", "na", "pk", "ru", "sac", "sg", "th", "us", "vn"]
 

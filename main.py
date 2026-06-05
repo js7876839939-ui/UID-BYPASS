@@ -647,7 +647,7 @@ class MajorLoginInterceptor:
                     f"[44A2FF]⟡  INFO :   [FFFFFF] UID NOT AUTHORISED\n"
                     f"[44A2FF]⟡  TIME  :   [FFFFFF]{time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}\n"
                     f"[44A2FF]⟡  UID     :   [FFFFFF]{uid}\n"
-                    f"[44A2FF]⟡  DEV  :   [FFFFFF] Script Kittens\n"
+                    f"[44A2FF]⟡  DEV  :   [FFFFFF] JATIN\n"
                     f"[44A2FF]⧉───────────────────────────────────────────────⧉\n"
                 ).encode()
 
