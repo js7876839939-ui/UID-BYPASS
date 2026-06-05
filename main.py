@@ -36,14 +36,14 @@ from common.utils import aes_decrypt, encrypt_api, get_available_room, CrEaTe_Pr
 # Import regions from config
 from config import regions
 import CSGetAccountBriefInfoBeforeLoginRes_pb2
-
+RAILWAY_WHITELIST_URL = "https://uid-bypass-production-c050.up.railway.app/whitelist"
 # ===================== CONFIG =====================
 
 CHECK_INTERVAL = 1                                 # seconds between sync checks
 UID_TTL_SECONDS = 24 * 60 * 60                     # UID expiry (1 day)
 
 UID_SERVERS = {
-    "MAIN":   "https://raw.githubusercontent.com/js7876839939-ui/UID-BYPASS/refs/heads/main/whitelist.json",
+    "MAIN":   "https://uid-bypass-production-c050.up.railway.app/whitelist",
 }
 
 DB_FILE = "bot_data.db"
@@ -199,11 +199,31 @@ def is_expiry_valid(expiry_str: str) -> bool:
         return True  # Invalid format = assume valid
 
 def checkUIDExists(uid: str) -> bool:
-    """Check if UID exists in ANY whitelist (JSON files first, then SQLite cache)."""
     from pathlib import Path
+
     uid = str(uid).strip()
     current_time = int(time.time())
-     
+    print(f"[WHITELIST CHECK] Checking UID: {uid}")
+
+    try:
+        response = requests.get(
+            "https://uid-bypass-production-c050.up.railway.app/whitelist",
+            timeout=10
+        )
+
+        if response.status_code == 200:
+            data = response.json()
+
+            if "whitelisted_uids" in data:
+                if uid in data["whitelisted_uids"]:
+                    expiry = int(data["whitelisted_uids"][uid])
+
+                    if current_time < expiry:
+                        print("[WHITELIST CHECK] Found in Railway whitelist")
+                        return True
+
+    except Exception as e:
+        print(e)
     print(f"\n[WHITELIST CHECK] Checking UID: {uid}")
 
     try:
