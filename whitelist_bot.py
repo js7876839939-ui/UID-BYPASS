@@ -10,7 +10,7 @@ import asyncio
 import hashlib
 from flask import Flask, jsonify
 import json, threading
-
+LOG_CHANNEL_ID = 1512030867869011988
 # Replace with your bot token
 import os
 # ===== API Code Start =====
@@ -365,6 +365,11 @@ async def on_ready():
     
     # Start the message update task
     update_expired_messages.start()
+
+    channel = bot.get_channel(LOG_CHANNEL_ID)
+
+    if channel:
+     await channel.send("✅ Log system online")
 
 async def send_not_allowed_message(interaction: discord.Interaction):
     """Send message when bot is not allowed in server."""
@@ -1253,7 +1258,7 @@ async def whitelistaddall(interaction: discord.Interaction, uid: str, duration: 
     
     # Add to main whitelist.json
     save_to_main_whitelist(uid, expiry_timestamp)
-    
+     
     expiry_datetime = datetime.fromtimestamp(expiry_timestamp, tz=timezone.utc)
     
     embed = discord.Embed(

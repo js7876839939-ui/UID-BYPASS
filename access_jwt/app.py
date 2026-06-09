@@ -162,6 +162,7 @@ def majorlogin_jwt():
                     token_value = data_dict["token"]
                     try:
                         decoded_token = jwt.decode(token_value, options={"verify_signature": False})
+                      
                     except Exception as e:
                         decoded_token = {}
 
