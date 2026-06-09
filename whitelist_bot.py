@@ -876,16 +876,50 @@ async def whitelistadd(interaction: discord.Interaction, uid: str, server: str, 
     
     # ALSO ADD TO MAIN WHITELIST.JSON for mitmproxy compatibility
     save_to_main_whitelist(uid, expiry_timestamp)
+    save_to_main_whitelist(uid, expiry_timestamp)
+
     log_channel = bot.get_channel(LOG_CHANNEL_ID)
 
     if log_channel:
-        await log_channel.send(
-        f"✅ UID WHITELISTED\n"
-        f"UID: {uid}\n"
-        f"SERVER: {server.upper()}\n"
-        f"BY: {interaction.user} ({interaction.user.id})\n"
-        f"GUILD: {interaction.guild.name}"
+        log_embed = discord.Embed(
+        title="✅ UID Whitelisted",
+        description=f"**UID:** `{uid}`",
+        color=0x2ecc71
     )
+
+    log_embed.add_field(
+        name="🌍 Server",
+        value=server.upper(),
+        inline=True
+    )
+
+    log_embed.add_field(
+        name="👤 Added By",
+        value=f"{interaction.user.mention}\n`{interaction.user.id}`",
+        inline=True
+    )
+
+    log_embed.add_field(
+        name="🏠 Guild",
+        value=interaction.guild.name,
+        inline=False
+    )
+
+    log_embed.add_field(
+        name="⏳ Duration",
+        value=f"{actual_duration} hours",
+        inline=True
+    )
+
+    log_embed.add_field(
+        name="📅 Expires",
+        value=f"<t:{int(expiry_timestamp)}:F>",
+        inline=True
+    )
+
+    log_embed.set_footer(text="UID Bypass Logs")
+
+    await log_channel.send(embed=log_embed)
     expiry_datetime = datetime.fromtimestamp(expiry_timestamp, tz=timezone.utc)
     
     duration_source = "specified" if duration is not None else "auto (from whitelist.json)"
