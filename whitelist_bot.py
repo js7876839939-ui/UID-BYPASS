@@ -876,7 +876,16 @@ async def whitelistadd(interaction: discord.Interaction, uid: str, server: str, 
     
     # ALSO ADD TO MAIN WHITELIST.JSON for mitmproxy compatibility
     save_to_main_whitelist(uid, expiry_timestamp)
-    
+    log_channel = bot.get_channel(LOG_CHANNEL_ID)
+
+    if log_channel:
+        await log_channel.send(
+        f"✅ UID WHITELISTED\n"
+        f"UID: {uid}\n"
+        f"SERVER: {server.upper()}\n"
+        f"BY: {interaction.user} ({interaction.user.id})\n"
+        f"GUILD: {interaction.guild.name}"
+    )
     expiry_datetime = datetime.fromtimestamp(expiry_timestamp, tz=timezone.utc)
     
     duration_source = "specified" if duration is not None else "auto (from whitelist.json)"
